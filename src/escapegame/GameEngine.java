@@ -14,7 +14,7 @@ public class GameEngine {
     public static final int GRID_WIDTH = 25;
     public static final int GRID_HEIGHT = 18;
 
-    private Random rng = new Random(911);
+    private Random rng = new Random();
 
     private int cleared = 0;
     private int turnNumber = 1;
@@ -34,7 +34,42 @@ public class GameEngine {
     }
 
     private TileType[][] generateLevel() {
-        return null;
+        /*
+        You must complete the code for the generateLevel() method. The method must return an array of
+        TileType values (TileType is an enumeration in the GameEngine class). Your code should return
+        the array which is used to draw tiles to the screen by the GameGUI class. For example, a 2D
+        array of only TileType.GRASS values will draw an empty level of grass tiles. You should code
+        the method to produce an interesting and fun level for the player to move around. It is suggested
+        that you design an algorithm and then implement the algorithm in code. The task requires levels
+        be generated dynamically and you should avoid hard coding a completely fixed level layout. The
+        level should contain exactly one tile with the type TileType.CAR.
+         */
+        tiles = new TileType[GRID_WIDTH][GRID_HEIGHT];
+        int carX = rng.nextInt(GRID_WIDTH);
+        int carY = rng.nextInt(GRID_HEIGHT);
+
+        for (int i = 0; i < tiles.length; i++) {
+            for (int j = 0; j < tiles[i].length; j++) {
+                int num = rng.nextInt(100);
+                if (num >= 0 && num < 100) {
+                    tiles[i][j] = TileType.GRASS;
+                }
+                if (num >= 0 && num < 50) {
+                    tiles[i][j] = TileType.DIRT;
+                }
+                if (num >= 0 && num < 15) {
+                    tiles[i][j] = TileType.ROAD;
+                }
+                if (num >= 0 && num < 10) {
+                    tiles[i][j] = TileType.NEST;
+                }
+                if (num >= 0 && num < 5) {
+                    tiles[i][j] = TileType.WALL;
+                }
+                tiles[carX][carY] = TileType.CAR;
+            }
+        }
+        return tiles;
     }
 
     private ArrayList<Point> getSpawns() {

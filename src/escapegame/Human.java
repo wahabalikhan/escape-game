@@ -1,17 +1,17 @@
 package escapegame;
 
 public class Human extends Entity {
-    private int maHealth;
+    private int maxHealth;
     private int health;
 
     public Human(int h, int x, int y) {
-        maHealth = h;
+        maxHealth = h;
         health = h;
         setPosition(x, y);
     }
 
-    public int getMaHealth() {
-        return maHealth;
+    public int getMaxHealth() {
+        return maxHealth;
     }
 
     public int getHealth() {
@@ -20,8 +20,8 @@ public class Human extends Entity {
 
     public void changeHealth(int amount) {
         health += amount;
-        if (health > maHealth) {
-            health = maHealth;
+        if (health > maxHealth) {
+            health = maxHealth;
         }
 
         if (health < 0) {

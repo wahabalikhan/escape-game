@@ -88,10 +88,10 @@ class Canvas extends JPanel {
             seeker = ImageIO.read(new File("assets/seeker.png"));
             assert seeker.getHeight() == GameGUI.TILE_HEIGHT &&
                     seeker.getWidth() == GameGUI.TILE_WIDTH;
-            wall = ImageIO.read(new File("assets/player.png"));
+            player = ImageIO.read(new File("assets/runner.png"));
             assert player.getHeight() == GameGUI.TILE_HEIGHT &&
                     player.getWidth() == GameGUI.TILE_WIDTH;
-            player = ImageIO.read(new File("assets/wall.png"));
+            wall = ImageIO.read(new File("assets/wall.png"));
             assert wall.getHeight() == GameGUI.TILE_HEIGHT &&
                     wall.getWidth() == GameGUI.TILE_WIDTH;
         } catch (IOException e) {
@@ -122,16 +122,22 @@ class Canvas extends JPanel {
                     switch (currentTiles[i][j]) {
                         case CAR:
                             g2.drawImage(car, i * GameGUI.TILE_WIDTH, j * GameGUI.TILE_HEIGHT, null);
+                            break;
                         case DIRT:
                             g2.drawImage(dirt, i * GameGUI.TILE_WIDTH, j * GameGUI.TILE_HEIGHT, null);
+                            break;
                         case NEST:
                             g2.drawImage(nest, i * GameGUI.TILE_WIDTH, j * GameGUI.TILE_HEIGHT, null);
+                            break;
                         case GRASS:
                             g2.drawImage(grass, i * GameGUI.TILE_WIDTH, j * GameGUI.TILE_HEIGHT, null);
+                            break;
                         case ROAD:
                             g2.drawImage(road, i * GameGUI.TILE_WIDTH, j * GameGUI.TILE_HEIGHT, null);
+                            break;
                         case WALL:
                             g2.drawImage(wall, i * GameGUI.TILE_WIDTH, j * GameGUI.TILE_HEIGHT, null);
+                            break;
                     }
                 }
             }
@@ -164,7 +170,7 @@ class Canvas extends JPanel {
     }
 
     private void drawHealthBar(Graphics2D g2, Human h) {
-        double remainingHealth = (double) h.getHealth() / (double) h.getMaHealth();
+        double remainingHealth = (double) h.getHealth() / (double) h.getMaxHealth();
         g2.setColor(Color.RED);
         g2.fill(new Rectangle2D.Double(h.getX() * GameGUI.TILE_WIDTH, h.getY() * GameGUI.TILE_HEIGHT + 29, GameGUI.TILE_WIDTH, GameGUI.HEALTH_BAR_HEIGHT));
         g2.setColor(Color.GREEN);
