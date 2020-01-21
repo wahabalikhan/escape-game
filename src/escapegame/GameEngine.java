@@ -154,11 +154,37 @@ public class GameEngine {
     }
 
     private void moveSeekers() {
-
+        for (int i=0; i<seekers.length; i++) {
+            if (seekers[i] != null) {
+                moveSeeker(seekers[i]);
+            }
+        }
     }
 
     private void moveSeeker(Seeker a) {
+        int seekerX = a.getX();
+        int seekerY = a.getY();
+        int playerX = player.getX();
+        int playerY = player.getY();
 
+        int differenceX = playerX - seekerX;
+        int differenceY = playerY - seekerY;
+
+        if (differenceX > 0) {
+            a.setPosition(a.getX()+1, a.getY());
+        }
+        if (differenceX < 0) {
+            a.setPosition(a.getX()-1, a.getY());
+        }
+        if (differenceY > 0) {
+            a.setPosition(a.getX(), a.getY()+1);
+        }
+        if (differenceX < 0) {
+            a.setPosition(a.getX(), a.getY()-1);
+        }
+        if ((a.getX() == playerX && a.getY() == playerY) || (playerX == a.getX() && playerY == a.getY())) {
+            player.changeHealth(-10);
+        }
     }
 
     private void moveChasers() {
