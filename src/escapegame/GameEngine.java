@@ -1,5 +1,7 @@
 package escapegame;
 
+import com.sun.source.tree.ArrayAccessTree;
+
 import java.awt.*;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -79,11 +81,27 @@ public class GameEngine {
     }
 
     private ArrayList<Point> getSpawns() {
-        return null;
+        ArrayList<Point> spawns = new ArrayList<Point>();
+        for (int i=0; i<tiles.length; i++) {
+            for (int j=0; j<tiles[i].length; j++) {
+                if (tiles[i][j] == TileType.GRASS || tiles[i][j] == TileType.DIRT || tiles[i][j] == TileType.ROAD || tiles[i][j] == TileType.NEST) {
+                    Point point = new Point(i,j);
+                    spawns.add(point);
+                }
+            }
+        }
+        return spawns;
     }
 
     private Seeker[] spawnSeekers() {
-        return null;
+        seekers = new Seeker[5];
+        for (int i=0; i< seekers.length; i++) {
+            Point point = spawns.get(rng.nextInt(spawns.size()));
+            seekers[i] = new Seeker(point.x, point.y);
+            spawns.remove(point.x);
+            spawns.remove(point.y);
+        }
+        return seekers;
     }
 
     private Human spawnPlayer() {
