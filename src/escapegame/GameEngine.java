@@ -44,16 +44,6 @@ public class GameEngine {
     }
 
     private TileType[][] generateLevel() {
-        /*
-        You must complete the code for the generateLevel() method. The method must return an array of
-        TileType values (TileType is an enumeration in the GameEngine class). Your code should return
-        the array which is used to draw tiles to the screen by the GameGUI class. For example, a 2D
-        array of only TileType.GRASS values will draw an empty level of grass tiles. You should code
-        the method to produce an interesting and fun level for the player to move around. It is suggested
-        that you design an algorithm and then implement the algorithm in code. The task requires levels
-        be generated dynamically and you should avoid hard coding a completely fixed level layout. The
-        level should contain exactly one tile with the type TileType.CAR.
-         */
         tiles = new TileType[GRID_WIDTH][GRID_HEIGHT];
         randomSpawns(carX, carY);
         for (int i = 0; i < tiles.length; i++) {
