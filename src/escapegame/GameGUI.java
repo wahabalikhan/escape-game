@@ -106,6 +106,7 @@ class Canvas extends JPanel {
         currentSeekers = s;
         currentChasers = c;
         currentFuel = f;
+        repaint();
     }
 
     public void paintComponent(Graphics g) {

@@ -33,6 +33,14 @@ public class GameEngine {
         this.gui = gui;
     }
 
+    int carX;
+    int carY;
+
+    private void randomSpawns(int x, int y) {
+        carX = rng.nextInt(GRID_WIDTH);
+        carY = rng.nextInt(GRID_HEIGHT);
+    }
+
     private TileType[][] generateLevel() {
         /*
         You must complete the code for the generateLevel() method. The method must return an array of
@@ -45,9 +53,7 @@ public class GameEngine {
         level should contain exactly one tile with the type TileType.CAR.
          */
         tiles = new TileType[GRID_WIDTH][GRID_HEIGHT];
-        int carX = rng.nextInt(GRID_WIDTH);
-        int carY = rng.nextInt(GRID_HEIGHT);
-
+        randomSpawns(carX, carY);
         for (int i = 0; i < tiles.length; i++) {
             for (int j = 0; j < tiles[i].length; j++) {
                 int num = rng.nextInt(100);
@@ -81,7 +87,8 @@ public class GameEngine {
     }
 
     private Human spawnPlayer() {
-        return null;
+        Human player = new Human(100, carX+1, carY);
+        return player;
     }
 
     private Fuel spawnFuel() {
@@ -89,15 +96,43 @@ public class GameEngine {
     }
 
     public void movePlayerLeft() {
+        int playerX = player.getX();
+        int playerY = player.getY();
+        if (tiles[playerX-1][playerY] == TileType.WALL) {
+            player.setPosition(playerX, playerY);
+        } else {
+            player.setPosition(playerX-1, playerY);
+        }
     }
 
     public void movePlayerRight() {
+        int playerX = player.getX();
+        int playerY = player.getY();
+        if (tiles[playerX+1][playerY] == TileType.WALL) {
+            player.setPosition(playerX, playerY);
+        } else {
+            player.setPosition(playerX+1, playerY);
+        }
     }
 
     public void movePlayerUp() {
+        int playerX = player.getX();
+        int playerY = player.getY();
+        if (tiles[playerX][playerY-1] == TileType.WALL) {
+            player.setPosition(playerX, playerY);
+        } else {
+            player.setPosition(playerX, playerY-1);
+        }
     }
 
     public void movePlayerDown() {
+        int playerX = player.getX();
+        int playerY = player.getY();
+        if (tiles[playerX][playerY+1] == TileType.WALL) {
+            player.setPosition(playerX, playerY);
+        } else {
+            player.setPosition(playerX, playerY+1);
+        }
     }
 
     private void moveSeekers() {
