@@ -110,7 +110,11 @@ public class GameEngine {
     }
 
     private Fuel spawnFuel() {
-        return null;
+        Point point = spawns.get(rng.nextInt(spawns.size()));
+        Fuel fuel = new Fuel(point.x, point.y);
+        spawns.remove(point.x);
+        spawns.remove(point.y);
+        return fuel;
     }
 
     public void movePlayerLeft() {
@@ -120,6 +124,18 @@ public class GameEngine {
             player.setPosition(playerX, playerY);
         } else {
             player.setPosition(playerX-1, playerY);
+        }
+
+        if (!fuelCollected) {
+            int fuelX = fuel.getX();
+            int fuelY = fuel.getY();
+            if (playerX == fuelX && playerY == fuelY) {
+                fuelCollected = true;
+                fuel = null;
+            }
+        }
+        if (fuelCollected && (playerX == carX && playerY == carY)) {
+            newLevel();
         }
     }
 
@@ -131,6 +147,18 @@ public class GameEngine {
         } else {
             player.setPosition(playerX+1, playerY);
         }
+
+        if (!fuelCollected) {
+            int fuelX = fuel.getX();
+            int fuelY = fuel.getY();
+            if (playerX == fuelX && playerY == fuelY) {
+                fuelCollected = true;
+                fuel = null;
+            }
+        }
+        if (fuelCollected && (playerX == carX && playerY == carY)) {
+            newLevel();
+        }
     }
 
     public void movePlayerUp() {
@@ -141,6 +169,18 @@ public class GameEngine {
         } else {
             player.setPosition(playerX, playerY-1);
         }
+
+        if (!fuelCollected) {
+            int fuelX = fuel.getX();
+            int fuelY = fuel.getY();
+            if (playerX == fuelX && playerY == fuelY) {
+                fuelCollected = true;
+                fuel = null;
+            }
+        }
+        if (fuelCollected && (playerX == carX && playerY == carY)) {
+            newLevel();
+        }
     }
 
     public void movePlayerDown() {
@@ -150,6 +190,18 @@ public class GameEngine {
             player.setPosition(playerX, playerY);
         } else {
             player.setPosition(playerX, playerY+1);
+        }
+
+        if (!fuelCollected) {
+            int fuelX = fuel.getX();
+            int fuelY = fuel.getY();
+            if (playerX == fuelX && playerY == fuelY) {
+                fuelCollected = true;
+                fuel = null;
+            }
+        }
+        if (fuelCollected && (playerX == carX && playerY == carY)) {
+            newLevel();
         }
     }
 
@@ -196,7 +248,15 @@ public class GameEngine {
     }
 
     private void newLevel() {
-
+        cleared++;
+        tiles = generateLevel();
+        spawns = getSpawns();
+        seekers = spawnSeekers();
+        chasers = new Chaser[50];
+        player = spawnPlayer();
+        fuel = spawnFuel();
+        fuelCollected = false;
+        gui.updateDisplay(tiles, player, seekers, chasers, fuel);
     }
 
     private void placePlayer() {
