@@ -256,7 +256,7 @@ public class GameEngine {
         spawns = getSpawns();
         seekers = spawnSeekers();
         chasers = new Chaser[50];
-        player = spawnPlayer();
+        placePlayer();
         fuel = spawnFuel();
         health = spawnHealth();
         fuelCollected = false;
@@ -265,7 +265,11 @@ public class GameEngine {
     }
 
     private void placePlayer() {
-
+        if (tiles[roadX][carY] == TileType.CAR) {
+            Human player = new Human(100, roadX, carY-1);
+        } else {
+            Human player = new Human(100, carX+1, roadY);
+        }
     }
 
     public void doTurn() {
