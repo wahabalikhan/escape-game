@@ -39,15 +39,19 @@ public class GameEngine {
 
     int carX;
     int carY;
+    int roadX;
+    int roadY;
 
-    private void randomSpawns(int x, int y) {
+    private void randomSpawns(int cX, int Cy, int rX, int rY) {
         carX = rng.nextInt(GRID_WIDTH);
         carY = rng.nextInt(GRID_HEIGHT);
+        roadX = rng.nextInt(GRID_WIDTH);
+        roadY = rng.nextInt(GRID_HEIGHT);
     }
 
     private TileType[][] generateLevel() {
         tiles = new TileType[GRID_WIDTH][GRID_HEIGHT];
-        randomSpawns(carX, carY);
+        randomSpawns(carX, carY, roadX, roadY);
         for (int i = 0; i < tiles.length; i++) {
             for (int j = 0; j < tiles[i].length; j++) {
                 int num = rng.nextInt(100);
@@ -57,16 +61,25 @@ public class GameEngine {
                 if (num >= 0 && num < 50) {
                     tiles[i][j] = TileType.DIRT;
                 }
-                if (num >= 0 && num < 15) {
-                    tiles[i][j] = TileType.ROAD;
-                }
                 if (num >= 0 && num < 10) {
                     tiles[i][j] = TileType.NEST;
                 }
                 if (num >= 0 && num < 5) {
                     tiles[i][j] = TileType.WALL;
                 }
-                tiles[carX][carY] = TileType.CAR;
+            }
+        }
+        // 0 represents width, 1 represents height
+        int randomNum = rng.nextInt(2);
+        if (randomNum == 0) {
+            for (int i=0; i<GRID_WIDTH; i++) {
+                tiles[i][roadY] = TileType.ROAD;
+                tiles[carX][roadY] = TileType.CAR;
+            }
+        } else {
+            for (int i=0; i<GRID_HEIGHT; i++) {
+                tiles[roadX][i] = TileType.ROAD;
+                tiles[roadX][carY] = TileType.CAR;
             }
         }
         return tiles;
@@ -97,8 +110,13 @@ public class GameEngine {
     }
 
     private Human spawnPlayer() {
-        Human player = new Human(100, carX+1, carY);
-        return player;
+        if (tiles[roadX][carY] == TileType.CAR) {
+            Human player = new Human(100, roadX, carY-1);
+            return player;
+        } else {
+            Human player = new Human(100, carX+1, roadY);
+            return player;
+        }
     }
 
     private Fuel spawnFuel() {
@@ -134,8 +152,14 @@ public class GameEngine {
                 fuel = null;
             }
         }
-        if (fuelCollected && (playerX == carX && playerY == carY)) {
-            newLevel();
+        if (tiles[roadX][carY] == TileType.CAR) {
+            if (fuelCollected && (playerX == roadX && playerY == carY)) {
+                newLevel();
+            } else {
+                if (fuelCollected && (playerX == carX && playerY == roadY)) {
+                    newLevel();
+                }
+            }
         }
 
         if (tiles[playerX][playerY] == TileType.NEST) {
@@ -176,8 +200,14 @@ public class GameEngine {
                 fuel = null;
             }
         }
-        if (fuelCollected && (playerX == carX && playerY == carY)) {
-            newLevel();
+        if (tiles[roadX][carY] == TileType.CAR) {
+            if (fuelCollected && (playerX == roadX && playerY == carY)) {
+                newLevel();
+            } else {
+                if (fuelCollected && (playerX == carX && playerY == roadY)) {
+                    newLevel();
+                }
+            }
         }
 
         if (tiles[playerX][playerY] == TileType.NEST) {
@@ -218,8 +248,14 @@ public class GameEngine {
                 fuel = null;
             }
         }
-        if (fuelCollected && (playerX == carX && playerY == carY)) {
-            newLevel();
+        if (tiles[roadX][carY] == TileType.CAR) {
+            if (fuelCollected && (playerX == roadX && playerY == carY)) {
+                newLevel();
+            } else {
+                if (fuelCollected && (playerX == carX && playerY == roadY)) {
+                    newLevel();
+                }
+            }
         }
 
         if (tiles[playerX][playerY] == TileType.NEST) {
@@ -260,8 +296,14 @@ public class GameEngine {
                 fuel = null;
             }
         }
-        if (fuelCollected && (playerX == carX && playerY == carY)) {
-            newLevel();
+        if (tiles[roadX][carY] == TileType.CAR) {
+            if (fuelCollected && (playerX == roadX && playerY == carY)) {
+                newLevel();
+            } else {
+                if (fuelCollected && (playerX == carX && playerY == roadY)) {
+                    newLevel();
+                }
+            }
         }
 
         if (tiles[playerX][playerY] == TileType.NEST) {
