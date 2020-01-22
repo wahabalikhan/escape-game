@@ -370,6 +370,7 @@ public class GameEngine {
         fuel = spawnFuel();
         health = spawnHealth();
         fuelCollected = false;
+        healthCollected = false;
         gui.updateDisplay(tiles, player, seekers, chasers, fuel, health);
     }
 
