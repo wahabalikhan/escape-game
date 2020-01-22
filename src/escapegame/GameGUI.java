@@ -12,21 +12,50 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 
+/**
+ * The GameGUI class is responsible for rendering graphics to the screen to display
+ * the game grid, player, monsters and the fuel. The GameGUI class passes keyboard
+ * events to a registered InputHandler to be handled.
+ */
 public class GameGUI extends JFrame {
+
+    /**
+     * The three final int attributes below set the size of some graphical elements,
+     * specifically the display height and width of tiles in the level and the height
+     * of health bars for Ship objects in the game. Tile sizes should match the size
+     * of the image files used in the game.
+     */
     public static final int TILE_WIDTH = 32;
     public static final int TILE_HEIGHT = 32;
     public static final int HEALTH_BAR_HEIGHT = 3;
 
+    /**
+     * The canvas is the area that graphics are drawn to. It is an internal class
+     * of the GameGUI class.
+     */
     Canvas canvas;
 
+    /**
+     * Constructor for the GameGUI class. It calls the initGUI method to generate the
+     * required objects for display.
+     */
     public GameGUI() {
         initGUI();
     }
 
+    /**
+     * Registers an object to be passed keyboard events captured by the GUI.
+     * @param i the InputHandler object that will process keyboard events to
+     * make the game respond to input
+     */
     public void registerKeyHandler(InputHandler i) {
         addKeyListener(i);
     }
 
+    /**
+     * Method to create and initialise components for displaying elements of the
+     * game on the screen.
+     */
     private void initGUI() {
         add(canvas = new Canvas());
         setTitle("Escape");
@@ -35,11 +64,35 @@ public class GameGUI extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
+    /**
+     * Method to update the graphical elements on the screen, usually after entities
+     * have moved when a keyboard event was handled. The method
+     * requires four arguments and displays corresponding information on the screen.
+     * @param tiles A 2-dimensional array of TileTypes. This is the tiles of the
+     * current level that should be drawn to the screen.
+     * @param player A Human object. This object is used to draw the player in
+    the right tile and display its health. null can be passed for this argument,
+    in which case no player will be drawn.
+     * @param seekers An array of Seeker objects that is processed to draw
+     * seekers in tiles. null can be passed for this argument in which case no
+     * seekers will be drawn. Elements in the seekers array can also be null,
+     * in which case nothing will be drawn for that element of the array.
+     * @param chasers An array of Chaser objects that is processed to draw
+     * chasers in tiles. null can be passed for this argument in which case no
+     * chasers will be drawn. Elements in the chasers array can also be null,
+     * in which case nothing will be drawn for that element of the array.
+     * @param fuel A Fuel object. This is used to draw the fuel on the map.
+     * @param health A Health object. This is used to draw the health on the map.
+     */
     public void updateDisplay(TileType[][] tiles, Human player, Seeker[] seekers, Chaser[] chasers, Fuel fuel, Health health) {
         canvas.update(tiles, player, seekers, chasers, fuel, health);
     }
 }
 
+/**
+ * Internal class used to draw elements within a JPanel. The Canvas class loads
+ * images from an asset folder inside the main project folder.
+ */
 class Canvas extends JPanel {
     private BufferedImage car;
     private BufferedImage chaser;
@@ -60,10 +113,16 @@ class Canvas extends JPanel {
     Fuel currentFuel;
     Health currentHealth;
 
+    /**
+     * Constructor that loads tile images for use in this class
+     */
     public Canvas() {
         loadTileImages();
     }
 
+    /**
+     * Loads tiles images from a fixed folder location within the project directory
+     */
     private void loadTileImages() {
         try {
             car = ImageIO.read(new File("assets/car.png"));
@@ -105,6 +164,9 @@ class Canvas extends JPanel {
         }
     }
 
+    /**
+     * Updates the current graphics on the screen to display the tiles, fuel, player and monsters
+     */
     public void update(TileType[][] t, Human p, Seeker[] s, Chaser[] c, Fuel f, Health h) {
         currentTiles = t;
         currentPlayer = p;
@@ -115,11 +177,22 @@ class Canvas extends JPanel {
         repaint();
     }
 
+    /**
+     * Override of method in super class, it draws the custom elements for this
+     * game such as the tiles, player, aliens and asteroids.
+     * @param g
+     */
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         drawMap(g);
     }
 
+    /**
+     * Draws graphical elements to the screen to display the current level
+     * tiles, the player, asteroids and the aliens. If the tiles, player or
+     * alien objects are null they will not be drawn.
+     * @param g Graphics object to use for drawing
+     */
     private void drawMap(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
         Random r = new Random(555);
@@ -179,6 +252,12 @@ class Canvas extends JPanel {
         }
     }
 
+    /**
+     * Draws a health bar for the given entity at the bottom of the tile that
+     * the entity is located in.
+     * @param g2 The graphics object to use for drawing
+     * @param h The entity that the health bar will be drawn for
+     */
     private void drawHealthBar(Graphics2D g2, Human h) {
         double remainingHealth = (double) h.getHealth() / (double) h.getMaxHealth();
         g2.setColor(Color.RED);
