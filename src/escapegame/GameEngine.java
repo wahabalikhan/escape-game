@@ -138,7 +138,7 @@ public class GameEngine {
     public void movePlayerLeft() {
         int playerX = player.getX();
         int playerY = player.getY();
-        if (tiles[playerX-1][playerY] == TileType.WALL) {
+        if (playerX == 0 || tiles[playerX-1][playerY] == TileType.WALL) {
             player.setPosition(playerX, playerY);
         } else {
             player.setPosition(playerX-1, playerY);
@@ -148,7 +148,7 @@ public class GameEngine {
     public void movePlayerRight() {
         int playerX = player.getX();
         int playerY = player.getY();
-        if (tiles[playerX+1][playerY] == TileType.WALL) {
+        if (playerX == 24 || tiles[playerX+1][playerY] == TileType.WALL) {
             player.setPosition(playerX, playerY);
         } else {
             player.setPosition(playerX+1, playerY);
@@ -158,7 +158,7 @@ public class GameEngine {
     public void movePlayerUp() {
         int playerX = player.getX();
         int playerY = player.getY();
-        if (tiles[playerX][playerY-1] == TileType.WALL) {
+        if (playerY == 0 ||tiles[playerX][playerY-1] == TileType.WALL) {
             player.setPosition(playerX, playerY);
         } else {
             player.setPosition(playerX, playerY-1);
@@ -168,7 +168,7 @@ public class GameEngine {
     public void movePlayerDown() {
         int playerX = player.getX();
         int playerY = player.getY();
-        if (tiles[playerX][playerY+1] == TileType.WALL) {
+        if (playerY == 17 ||tiles[playerX][playerY+1] == TileType.WALL) {
             player.setPosition(playerX, playerY);
         } else {
             player.setPosition(playerX, playerY+1);
