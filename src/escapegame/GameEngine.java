@@ -143,44 +143,6 @@ public class GameEngine {
         } else {
             player.setPosition(playerX-1, playerY);
         }
-
-        if (!fuelCollected) {
-            int fuelX = fuel.getX();
-            int fuelY = fuel.getY();
-            if (playerX == fuelX && playerY == fuelY) {
-                fuelCollected = true;
-                fuel = null;
-            }
-        }
-        if (tiles[roadX][carY] == TileType.CAR) {
-            if (fuelCollected && (playerX == roadX && playerY == carY)) {
-                newLevel();
-            } else {
-                if (fuelCollected && (playerX == carX && playerY == roadY)) {
-                    newLevel();
-                }
-            }
-        }
-
-        if (tiles[playerX][playerY] == TileType.NEST) {
-            for (int i=0; i<chasers.length; i++) {
-                if (chasers[i] == null) {
-                    chasers[i] = new Chaser(playerX+1, playerY+1);
-                    numChasers++;
-                    break;
-                }
-            }
-        }
-
-        if (!healthCollected) {
-            int healthX = health.getX();
-            int healthY = health.getY();
-            if (playerX == healthX && playerY == healthY) {
-                healthCollected = true;
-                health = null;
-                player.changeHealth(10);
-            }
-        }
     }
 
     public void movePlayerRight() {
@@ -190,44 +152,6 @@ public class GameEngine {
             player.setPosition(playerX, playerY);
         } else {
             player.setPosition(playerX+1, playerY);
-        }
-
-        if (!fuelCollected) {
-            int fuelX = fuel.getX();
-            int fuelY = fuel.getY();
-            if (playerX == fuelX && playerY == fuelY) {
-                fuelCollected = true;
-                fuel = null;
-            }
-        }
-        if (tiles[roadX][carY] == TileType.CAR) {
-            if (fuelCollected && (playerX == roadX && playerY == carY)) {
-                newLevel();
-            } else {
-                if (fuelCollected && (playerX == carX && playerY == roadY)) {
-                    newLevel();
-                }
-            }
-        }
-
-        if (tiles[playerX][playerY] == TileType.NEST) {
-            for (int i=0; i<chasers.length; i++) {
-                if (chasers[i] == null) {
-                    Chaser chaser = new Chaser(playerX+1, playerY+1);
-                    numChasers++;
-                    break;
-                }
-            }
-        }
-
-        if (!healthCollected) {
-            int healthX = health.getX();
-            int healthY = health.getY();
-            if (playerX == healthX && playerY == healthY) {
-                healthCollected = true;
-                health = null;
-                player.changeHealth(10);
-            }
         }
     }
 
@@ -239,44 +163,6 @@ public class GameEngine {
         } else {
             player.setPosition(playerX, playerY-1);
         }
-
-        if (!fuelCollected) {
-            int fuelX = fuel.getX();
-            int fuelY = fuel.getY();
-            if (playerX == fuelX && playerY == fuelY) {
-                fuelCollected = true;
-                fuel = null;
-            }
-        }
-        if (tiles[roadX][carY] == TileType.CAR) {
-            if (fuelCollected && (playerX == roadX && playerY == carY)) {
-                newLevel();
-            } else {
-                if (fuelCollected && (playerX == carX && playerY == roadY)) {
-                    newLevel();
-                }
-            }
-        }
-
-        if (tiles[playerX][playerY] == TileType.NEST) {
-            for (int i=0; i<chasers.length; i++) {
-                if (chasers[i] == null) {
-                    Chaser chaser = new Chaser(playerX+1, playerY+1);
-                    numChasers++;
-                    break;
-                }
-            }
-        }
-
-        if (!healthCollected) {
-            int healthX = health.getX();
-            int healthY = health.getY();
-            if (playerX == healthX && playerY == healthY) {
-                healthCollected = true;
-                health = null;
-                player.changeHealth(10);
-            }
-        }
     }
 
     public void movePlayerDown() {
@@ -286,44 +172,6 @@ public class GameEngine {
             player.setPosition(playerX, playerY);
         } else {
             player.setPosition(playerX, playerY+1);
-        }
-
-        if (!fuelCollected) {
-            int fuelX = fuel.getX();
-            int fuelY = fuel.getY();
-            if (playerX == fuelX && playerY == fuelY) {
-                fuelCollected = true;
-                fuel = null;
-            }
-        }
-        if (tiles[roadX][carY] == TileType.CAR) {
-            if (fuelCollected && (playerX == roadX && playerY == carY)) {
-                newLevel();
-            } else {
-                if (fuelCollected && (playerX == carX && playerY == roadY)) {
-                    newLevel();
-                }
-            }
-        }
-
-        if (tiles[playerX][playerY] == TileType.NEST) {
-            for (int i=0; i<chasers.length; i++) {
-                if (chasers[i] == null) {
-                    Chaser chaser = new Chaser(playerX+1, playerY+1);
-                    numChasers++;
-                    break;
-                }
-            }
-        }
-
-        if (!healthCollected) {
-            int healthX = health.getX();
-            int healthY = health.getY();
-            if (playerX == healthX && playerY == healthY) {
-                healthCollected = true;
-                health = null;
-                player.changeHealth(10);
-            }
         }
     }
 
@@ -432,6 +280,48 @@ public class GameEngine {
         if (player.getHealth() < 1) {
             System.exit(0);
         }
+
+        int playerX = player.getX();
+        int playerY = player.getY();
+        if (!fuelCollected) {
+            int fuelX = fuel.getX();
+            int fuelY = fuel.getY();
+            if (playerX == fuelX && playerY == fuelY) {
+                fuelCollected = true;
+                fuel = null;
+            }
+        }
+        if (tiles[roadX][carY] == TileType.CAR) {
+            if (fuelCollected && (playerX == roadX && playerY == carY)) {
+                newLevel();
+            }
+        }
+        if (tiles[carX][roadY] == TileType.CAR) {
+            if (fuelCollected && (playerX == carX && playerY == roadY)) {
+                newLevel();
+            }
+        }
+
+        if (tiles[playerX][playerY] == TileType.NEST) {
+            for (int i=0; i<chasers.length; i++) {
+                if (chasers[i] == null) {
+                    chasers[i] = new Chaser(playerX+1, playerY+1);
+                    numChasers++;
+                    break;
+                }
+            }
+        }
+
+        if (!healthCollected) {
+            int healthX = health.getX();
+            int healthY = health.getY();
+            if (playerX == healthX && playerY == healthY) {
+                healthCollected = true;
+                health = null;
+                player.changeHealth(10);
+            }
+        }
+
         gui.updateDisplay(tiles, player, seekers, chasers, fuel, health);
         turnNumber++;
     }
