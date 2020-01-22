@@ -21,6 +21,7 @@ public class GameEngine {
     private int cleared = 0;
     private int turnNumber = 1;
     private int numChasers = 0;
+    private int numSeekers = 5;
 
     private GameGUI gui;
     private TileType[][] tiles;
@@ -99,7 +100,7 @@ public class GameEngine {
     }
 
     private Seeker[] spawnSeekers() {
-        seekers = new Seeker[5];
+        seekers = new Seeker[numSeekers];
         for (int i = 0; i < seekers.length; i++) {
             Point point = spawns.get(rng.nextInt(spawns.size()));
             seekers[i] = new Seeker(point.x, point.y);
@@ -280,6 +281,7 @@ public class GameEngine {
 
     private void newLevel() {
         cleared++;
+        numSeekers++;
         tiles = generateLevel();
         spawns = getSpawns();
         seekers = spawnSeekers();
@@ -294,9 +296,9 @@ public class GameEngine {
 
     private void placePlayer() {
         if (tiles[roadX][carY] == TileType.CAR) {
-            Human player = new Human(100, roadX, carY - 1);
+            player.setPosition(roadX, carY - 1);
         } else {
-            Human player = new Human(100, carX + 1, roadY);
+            player.setPosition(carX + 1, roadY);
         }
     }
 
