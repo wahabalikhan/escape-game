@@ -30,6 +30,8 @@ public class GameEngine {
     private boolean fuelCollected = false;
     private Seeker[] seekers;
     private Chaser[] chasers;
+    private Health health;
+    private boolean healthCollected = false;
 
     public GameEngine(GameGUI gui) {
         this.gui = gui;
@@ -107,6 +109,14 @@ public class GameEngine {
         return fuel;
     }
 
+    private Health spawnHealth() {
+        Point point = spawns.get(rng.nextInt(spawns.size()));
+        Health health = new Health(point.x, point.y);
+        spawns.remove(point.x);
+        spawns.remove(point.y);
+        return health;
+    }
+
     public void movePlayerLeft() {
         int playerX = player.getX();
         int playerY = player.getY();
@@ -135,6 +145,16 @@ public class GameEngine {
                     numChasers++;
                     break;
                 }
+            }
+        }
+
+        if (!healthCollected) {
+            int healthX = health.getX();
+            int healthY = health.getY();
+            if (playerX == healthX && playerY == healthY) {
+                healthCollected = true;
+                health = null;
+                player.changeHealth(10);
             }
         }
     }
@@ -169,6 +189,16 @@ public class GameEngine {
                 }
             }
         }
+
+        if (!healthCollected) {
+            int healthX = health.getX();
+            int healthY = health.getY();
+            if (playerX == healthX && playerY == healthY) {
+                healthCollected = true;
+                health = null;
+                player.changeHealth(10);
+            }
+        }
     }
 
     public void movePlayerUp() {
@@ -201,6 +231,16 @@ public class GameEngine {
                 }
             }
         }
+
+        if (!healthCollected) {
+            int healthX = health.getX();
+            int healthY = health.getY();
+            if (playerX == healthX && playerY == healthY) {
+                healthCollected = true;
+                health = null;
+                player.changeHealth(10);
+            }
+        }
     }
 
     public void movePlayerDown() {
@@ -231,6 +271,16 @@ public class GameEngine {
                     numChasers++;
                     break;
                 }
+            }
+        }
+
+        if (!healthCollected) {
+            int healthX = health.getX();
+            int healthY = health.getY();
+            if (playerX == healthX && playerY == healthY) {
+                healthCollected = true;
+                health = null;
+                player.changeHealth(10);
             }
         }
     }
@@ -318,8 +368,9 @@ public class GameEngine {
         chasers = new Chaser[50];
         player = spawnPlayer();
         fuel = spawnFuel();
+        health = spawnHealth();
         fuelCollected = false;
-        gui.updateDisplay(tiles, player, seekers, chasers, fuel);
+        gui.updateDisplay(tiles, player, seekers, chasers, fuel, health);
     }
 
     private void placePlayer() {
@@ -338,7 +389,7 @@ public class GameEngine {
         if (player.getHealth() < 1) {
             System.exit(0);
         }
-        gui.updateDisplay(tiles, player, seekers, chasers, fuel);
+        gui.updateDisplay(tiles, player, seekers, chasers, fuel, health);
         turnNumber++;
     }
 
@@ -349,6 +400,7 @@ public class GameEngine {
         chasers = new Chaser[50];
         player = spawnPlayer();
         fuel = spawnFuel();
-        gui.updateDisplay(tiles, player, seekers, chasers, fuel);
+        health = spawnHealth();
+        gui.updateDisplay(tiles, player, seekers, chasers, fuel, health);
     }
 }

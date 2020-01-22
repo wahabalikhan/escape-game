@@ -35,8 +35,8 @@ public class GameGUI extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
-    public void updateDisplay(TileType[][] tiles, Human player, Seeker[] seekers, Chaser[] chasers, Fuel fuel) {
-        canvas.update(tiles, player, seekers, chasers, fuel);
+    public void updateDisplay(TileType[][] tiles, Human player, Seeker[] seekers, Chaser[] chasers, Fuel fuel, Health health) {
+        canvas.update(tiles, player, seekers, chasers, fuel, health);
     }
 }
 
@@ -51,12 +51,14 @@ class Canvas extends JPanel {
     private BufferedImage seeker;
     private BufferedImage wall;
     private BufferedImage player;
+    private BufferedImage health;
 
     TileType[][] currentTiles;
     Human currentPlayer;
     Seeker[] currentSeekers;
     Chaser[] currentChasers;
     Fuel currentFuel;
+    Health currentHealth;
 
     public Canvas() {
         loadTileImages();
@@ -94,18 +96,22 @@ class Canvas extends JPanel {
             wall = ImageIO.read(new File("assets/wall.png"));
             assert wall.getHeight() == GameGUI.TILE_HEIGHT &&
                     wall.getWidth() == GameGUI.TILE_WIDTH;
+            health = ImageIO.read(new File("assets/health.png"));
+            assert health.getHeight() == GameGUI.TILE_HEIGHT &&
+                    health.getWidth() == GameGUI.TILE_WIDTH;
         } catch (IOException e) {
             System.out.println("Exception loading image: " + e.getMessage());
             e.printStackTrace(System.out);
         }
     }
 
-    public void update(TileType[][] t, Human p, Seeker[] s, Chaser[] c, Fuel f) {
+    public void update(TileType[][] t, Human p, Seeker[] s, Chaser[] c, Fuel f, Health h) {
         currentTiles = t;
         currentPlayer = p;
         currentSeekers = s;
         currentChasers = c;
         currentFuel = f;
+        currentHealth = h;
         repaint();
     }
 
@@ -167,6 +173,9 @@ class Canvas extends JPanel {
 
         if (currentFuel != null) {
             g2.drawImage(fuel, currentFuel.getX() * GameGUI.TILE_WIDTH, currentFuel.getY() * GameGUI.TILE_HEIGHT, null);
+        }
+        if (currentHealth != null) {
+            g2.drawImage(health, currentHealth.getX() * GameGUI.TILE_WIDTH, currentHealth.getY() * GameGUI.TILE_HEIGHT, null);
         }
     }
 
