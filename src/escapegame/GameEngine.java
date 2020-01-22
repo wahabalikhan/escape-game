@@ -127,6 +127,16 @@ public class GameEngine {
         if (fuelCollected && (playerX == carX && playerY == carY)) {
             newLevel();
         }
+
+        if (tiles[playerX][playerY] == TileType.NEST) {
+            for (int i=0; i<chasers.length; i++) {
+                if (chasers[i] == null) {
+                    chasers[i] = new Chaser(playerX+1, playerY+1);
+                    numChasers++;
+                    break;
+                }
+            }
+        }
     }
 
     public void movePlayerRight() {
@@ -148,6 +158,16 @@ public class GameEngine {
         }
         if (fuelCollected && (playerX == carX && playerY == carY)) {
             newLevel();
+        }
+
+        if (tiles[playerX][playerY] == TileType.NEST) {
+            for (int i=0; i<chasers.length; i++) {
+                if (chasers[i] == null) {
+                    Chaser chaser = new Chaser(playerX+1, playerY+1);
+                    numChasers++;
+                    break;
+                }
+            }
         }
     }
 
@@ -171,6 +191,16 @@ public class GameEngine {
         if (fuelCollected && (playerX == carX && playerY == carY)) {
             newLevel();
         }
+
+        if (tiles[playerX][playerY] == TileType.NEST) {
+            for (int i=0; i<chasers.length; i++) {
+                if (chasers[i] == null) {
+                    Chaser chaser = new Chaser(playerX+1, playerY+1);
+                    numChasers++;
+                    break;
+                }
+            }
+        }
     }
 
     public void movePlayerDown() {
@@ -192,6 +222,16 @@ public class GameEngine {
         }
         if (fuelCollected && (playerX == carX && playerY == carY)) {
             newLevel();
+        }
+
+        if (tiles[playerX][playerY] == TileType.NEST) {
+            for (int i=0; i<chasers.length; i++) {
+                if (chasers[i] == null) {
+                    Chaser chaser = new Chaser(playerX+1, playerY+1);
+                    numChasers++;
+                    break;
+                }
+            }
         }
     }
 
@@ -230,11 +270,44 @@ public class GameEngine {
     }
 
     private void moveChasers() {
-
+        for (int i=0; i<chasers.length; i++) {
+            if (chasers[i] != null) {
+                moveChaser(chasers[i]);
+            }
+        }
     }
 
     private void moveChaser(Chaser c) {
+        for (int i=0; i<chasers.length; i++) {
+            if (chasers[i] == null) {
+                break;
+            } else {
+                Chaser chaser = chasers[i];
+                int chaserX = c.getX();
+                int chaserY = c.getY();
+                int playerX = player.getX();
+                int playerY = player.getY();
 
+                int differenceX = playerX - chaserX;
+                int differenceY = playerY - chaserY;
+
+                if (differenceX > 0) {
+                    chaser.setPosition(c.getX()+1, c.getY());
+                }
+                if (differenceX < 0) {
+                    c.setPosition(c.getX()-1, c.getY());
+                }
+                if (differenceY > 0) {
+                    c.setPosition(c.getX(), c.getY()+1);
+                }
+                if (differenceX < 0) {
+                    c.setPosition(c.getX(), c.getY()-1);
+                }
+                if ((c.getX() == playerX && c.getY() == playerY) || (playerX == c.getX() && playerY == c.getY())) {
+                    player.changeHealth(-10);
+                }
+            }
+        }
     }
 
     private void newLevel() {
@@ -256,6 +329,10 @@ public class GameEngine {
     public void doTurn() {
         if (turnNumber % 5 == 0) {
             moveSeekers();
+        }
+
+        if (turnNumber % 2 == 0) {
+            moveChasers();
         }
 
         if (player.getHealth() < 1) {
