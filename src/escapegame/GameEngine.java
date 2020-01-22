@@ -72,12 +72,12 @@ public class GameEngine {
         // 0 represents width, 1 represents height
         int randomNum = rng.nextInt(2);
         if (randomNum == 0) {
-            for (int i=0; i<GRID_WIDTH; i++) {
+            for (int i = 0; i < GRID_WIDTH; i++) {
                 tiles[i][roadY] = TileType.ROAD;
                 tiles[carX][roadY] = TileType.CAR;
             }
         } else {
-            for (int i=0; i<GRID_HEIGHT; i++) {
+            for (int i = 0; i < GRID_HEIGHT; i++) {
                 tiles[roadX][i] = TileType.ROAD;
                 tiles[roadX][carY] = TileType.CAR;
             }
@@ -87,10 +87,10 @@ public class GameEngine {
 
     private ArrayList<Point> getSpawns() {
         ArrayList<Point> spawns = new ArrayList<Point>();
-        for (int i=0; i<tiles.length; i++) {
-            for (int j=0; j<tiles[i].length; j++) {
+        for (int i = 0; i < tiles.length; i++) {
+            for (int j = 0; j < tiles[i].length; j++) {
                 if (tiles[i][j] == TileType.GRASS || tiles[i][j] == TileType.DIRT || tiles[i][j] == TileType.ROAD || tiles[i][j] == TileType.NEST) {
-                    Point point = new Point(i,j);
+                    Point point = new Point(i, j);
                     spawns.add(point);
                 }
             }
@@ -100,7 +100,7 @@ public class GameEngine {
 
     private Seeker[] spawnSeekers() {
         seekers = new Seeker[5];
-        for (int i=0; i< seekers.length; i++) {
+        for (int i = 0; i < seekers.length; i++) {
             Point point = spawns.get(rng.nextInt(spawns.size()));
             seekers[i] = new Seeker(point.x, point.y);
             spawns.remove(point.x);
@@ -111,10 +111,10 @@ public class GameEngine {
 
     private Human spawnPlayer() {
         if (tiles[roadX][carY] == TileType.CAR) {
-            Human player = new Human(100, roadX, carY-1);
+            Human player = new Human(100, roadX, carY - 1);
             return player;
         } else {
-            Human player = new Human(100, carX+1, roadY);
+            Human player = new Human(100, carX + 1, roadY);
             return player;
         }
     }
@@ -138,45 +138,45 @@ public class GameEngine {
     public void movePlayerLeft() {
         int playerX = player.getX();
         int playerY = player.getY();
-        if (playerX == 0 || tiles[playerX-1][playerY] == TileType.WALL) {
+        if (playerX == 0 || tiles[playerX - 1][playerY] == TileType.WALL) {
             player.setPosition(playerX, playerY);
         } else {
-            player.setPosition(playerX-1, playerY);
+            player.setPosition(playerX - 1, playerY);
         }
     }
 
     public void movePlayerRight() {
         int playerX = player.getX();
         int playerY = player.getY();
-        if (playerX == 24 || tiles[playerX+1][playerY] == TileType.WALL) {
+        if (playerX == 24 || tiles[playerX + 1][playerY] == TileType.WALL) {
             player.setPosition(playerX, playerY);
         } else {
-            player.setPosition(playerX+1, playerY);
+            player.setPosition(playerX + 1, playerY);
         }
     }
 
     public void movePlayerUp() {
         int playerX = player.getX();
         int playerY = player.getY();
-        if (playerY == 0 ||tiles[playerX][playerY-1] == TileType.WALL) {
+        if (playerY == 0 || tiles[playerX][playerY - 1] == TileType.WALL) {
             player.setPosition(playerX, playerY);
         } else {
-            player.setPosition(playerX, playerY-1);
+            player.setPosition(playerX, playerY - 1);
         }
     }
 
     public void movePlayerDown() {
         int playerX = player.getX();
         int playerY = player.getY();
-        if (playerY == 17 ||tiles[playerX][playerY+1] == TileType.WALL) {
+        if (playerY == 17 || tiles[playerX][playerY + 1] == TileType.WALL) {
             player.setPosition(playerX, playerY);
         } else {
-            player.setPosition(playerX, playerY+1);
+            player.setPosition(playerX, playerY + 1);
         }
     }
 
     private void moveSeekers() {
-        for (int i=0; i<seekers.length; i++) {
+        for (int i = 0; i < seekers.length; i++) {
             if (seekers[i] != null) {
                 moveSeeker(seekers[i]);
             }
@@ -192,25 +192,41 @@ public class GameEngine {
         int differenceX = playerX - seekerX;
         int differenceY = playerY - seekerY;
 
-        if (differenceX > 0) {
-            a.setPosition(a.getX()+1, a.getY());
+        boolean canMove = true;
+        for (int i = 0; i < seekers.length; i++) {
+            Seeker seeker = seekers[i];
+            if (differenceX < 0 && a.getX() - 1 == seeker.getX() && a.getY() == seeker.getY()) {
+                canMove = false;
+            }
+            if (differenceX > 0 && a.getX() + 1 == seeker.getX() && a.getY() == seeker.getY()) {
+                canMove = false;
+            }
+            if (differenceY > 0 && a.getX() == seeker.getX() && a.getY() + 1 == seeker.getY()) {
+                canMove = false;
+            }
+            if (differenceY < 0 && a.getX() == seeker.getX() && a.getY() - 1 == seeker.getY()) {
+                canMove = false;
+            }
         }
-        if (differenceX < 0) {
-            a.setPosition(a.getX()-1, a.getY());
+        if (differenceX < 0 && canMove) {
+            a.setPosition(a.getX() - 1, a.getY());
         }
-        if (differenceY > 0) {
-            a.setPosition(a.getX(), a.getY()+1);
+        if (differenceX > 0 && canMove) {
+            a.setPosition(a.getX() + 1, a.getY());
         }
-        if (differenceX < 0) {
-            a.setPosition(a.getX(), a.getY()-1);
+        if (differenceY > 0 && canMove) {
+            a.setPosition(a.getX(), a.getY() + 1);
         }
-        if ((a.getX() == playerX && a.getY() == playerY) || (playerX == a.getX() && playerY == a.getY())) {
+        if (differenceY < 0 && canMove) {
+            a.setPosition(a.getX(), a.getY() - 1);
+        }
+        if (a.getX() == playerX && a.getY() == playerY) {
             player.changeHealth(-10);
         }
     }
 
     private void moveChasers() {
-        for (int i=0; i<chasers.length; i++) {
+        for (int i = 0; i < chasers.length; i++) {
             if (chasers[i] != null) {
                 moveChaser(chasers[i]);
             }
@@ -218,35 +234,47 @@ public class GameEngine {
     }
 
     private void moveChaser(Chaser c) {
-        for (int i=0; i<chasers.length; i++) {
+        int playerX = player.getX();
+        int playerY = player.getY();
+        int chaserX = c.getX();
+        int chaserY = c.getY();
+
+        int differenceX = playerX - chaserX;
+        int differenceY = playerY - chaserY;
+        boolean canMove = true;
+        for (int i = 0; i < chasers.length; i++) {
             if (chasers[i] == null) {
                 break;
             } else {
                 Chaser chaser = chasers[i];
-                int chaserX = c.getX();
-                int chaserY = c.getY();
-                int playerX = player.getX();
-                int playerY = player.getY();
-
-                int differenceX = playerX - chaserX;
-                int differenceY = playerY - chaserY;
-
-                if (differenceX > 0) {
-                    chaser.setPosition(c.getX()+1, c.getY());
+                if (differenceX < 0 && c.getX() - 1 == chaser.getX() && c.getY() == chaser.getY()) {
+                    canMove = false;
                 }
-                if (differenceX < 0) {
-                    c.setPosition(c.getX()-1, c.getY());
+                if (differenceX > 0 && c.getX() + 1 == chaser.getX() && c.getY() == chaser.getY()) {
+                    canMove = false;
                 }
-                if (differenceY > 0) {
-                    c.setPosition(c.getX(), c.getY()+1);
+                if (differenceY > 0 && c.getX() == chaser.getX() && c.getY() + 1 == chaser.getY()) {
+                    canMove = false;
                 }
-                if (differenceX < 0) {
-                    c.setPosition(c.getX(), c.getY()-1);
-                }
-                if ((c.getX() == playerX && c.getY() == playerY) || (playerX == c.getX() && playerY == c.getY())) {
-                    player.changeHealth(-10);
+                if (differenceY < 0 && c.getX() == chaser.getX() && c.getY() - 1 == chaser.getY()) {
+                    canMove = false;
                 }
             }
+        }
+        if (differenceX < 0 && canMove) {
+            c.setPosition(c.getX() - 1, c.getY());
+        }
+        if (differenceX > 0 && canMove) {
+            c.setPosition(c.getX() + 1, c.getY());
+        }
+        if (differenceY > 0 && canMove) {
+            c.setPosition(c.getX(), c.getY() + 1);
+        }
+        if (differenceY < 0 && canMove) {
+            c.setPosition(c.getX(), c.getY() - 1);
+        }
+        if (c.getX() == playerX && c.getY() == playerY) {
+            player.changeHealth(-10);
         }
     }
 
@@ -266,9 +294,9 @@ public class GameEngine {
 
     private void placePlayer() {
         if (tiles[roadX][carY] == TileType.CAR) {
-            Human player = new Human(100, roadX, carY-1);
+            Human player = new Human(100, roadX, carY - 1);
         } else {
-            Human player = new Human(100, carX+1, roadY);
+            Human player = new Human(100, carX + 1, roadY);
         }
     }
 
@@ -307,9 +335,9 @@ public class GameEngine {
         }
 
         if (tiles[playerX][playerY] == TileType.NEST) {
-            for (int i=0; i<chasers.length; i++) {
+            for (int i = 0; i < chasers.length; i++) {
                 if (chasers[i] == null) {
-                    chasers[i] = new Chaser(playerX+1, playerY+1);
+                    chasers[i] = new Chaser(playerX + 1, playerY + 1);
                     numChasers++;
                     break;
                 }
