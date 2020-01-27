@@ -57,7 +57,7 @@ public class GameEngine {
      * The number of levels cleared by the player in this game. Can be used to
      * generate harder games as the player clears levels.
      */
-    private static int cleared = 0;
+    public static int cleared = 0;
 
     /**
      * Tracks the current turn number. Used to control monster movement.
@@ -103,7 +103,7 @@ public class GameEngine {
      * information for the player, including the current position (which is a
      * pair of co-ordinates that corresponds to a tile in the current level)
      */
-    private static Human player;
+    public static Human player;
 
     /**
      * A Fuel object that must be collected by the player in order to move to
@@ -672,29 +672,5 @@ public class GameEngine {
         fuel = spawnFuel();
         health = spawnHealth();
         gui.updateDisplay(tiles, player, seekers, chasers, fuel, health);
-    }
-
-    public static void youWin(Graphics g) {
-        try {
-            Graphics2D g2 = (Graphics2D) g;
-            Image youWin = ImageIO.read(new File("assets/you-win.png"));
-            if (cleared == 5) {
-                g2.drawImage(youWin, 0, 0, 816,615,null);
-            }
-        } catch (IOException e) {
-            System.out.println(e);
-        }
-    }
-
-    public static void gameOver(Graphics g) {
-        try {
-            Graphics2D g2 = (Graphics2D) g;
-            Image gameOver = ImageIO.read(new File("assets/game-over.png"));
-            if (player.getHealth() < 1) {
-                g2.drawImage(gameOver, 0, 0, 816,615,null);
-            }
-        } catch (IOException e) {
-            System.out.println(e);
-        }
     }
 }

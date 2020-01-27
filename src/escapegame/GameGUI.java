@@ -185,8 +185,8 @@ class Canvas extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         drawMap(g);
-        GameEngine.youWin(g);
-        GameEngine.gameOver(g);
+        youWin(g);
+        gameOver(g);
     }
 
     /**
@@ -266,5 +266,29 @@ class Canvas extends JPanel {
         g2.fill(new Rectangle2D.Double(h.getX() * GameGUI.TILE_WIDTH, h.getY() * GameGUI.TILE_HEIGHT + 29, GameGUI.TILE_WIDTH, GameGUI.HEALTH_BAR_HEIGHT));
         g2.setColor(Color.GREEN);
         g2.fill(new Rectangle2D.Double(h.getX() * GameGUI.TILE_WIDTH, h.getY() * GameGUI.TILE_HEIGHT + 29, GameGUI.TILE_WIDTH * remainingHealth, GameGUI.HEALTH_BAR_HEIGHT));
+    }
+
+    private void youWin(Graphics g) {
+        try {
+            Graphics2D g2 = (Graphics2D) g;
+            Image youWin = ImageIO.read(new File("assets/you-win.png"));
+            if (GameEngine.cleared == 5) {
+                g2.drawImage(youWin, 0, 0, 816,615,null);
+            }
+        } catch (IOException e) {
+            System.out.println(e);
+        }
+    }
+
+    private void gameOver(Graphics g) {
+        try {
+            Graphics2D g2 = (Graphics2D) g;
+            Image gameOver = ImageIO.read(new File("assets/game-over.png"));
+            if (GameEngine.player.getHealth() < 1) {
+                g2.drawImage(gameOver, 0, 0, 816,615,null);
+            }
+        } catch (IOException e) {
+            System.out.println(e);
+        }
     }
 }
