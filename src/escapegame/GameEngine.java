@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
  * creating levels, the player, monsters, as well as updating information when a
  * key is pressed while the game is running.
  */
-public class GameEngine extends JPanel {
+public class GameEngine {
 
     /**
      * An enumeration type to represent different types of tiles that make up
