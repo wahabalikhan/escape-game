@@ -1,6 +1,8 @@
 package escapegame;
 
 import java.awt.*;
+import java.awt.image.ImageObserver;
+import java.text.AttributedCharacterIterator;
 
 /**
  * This class is the entry point for the project, containing the main method that

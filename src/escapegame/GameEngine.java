@@ -1,15 +1,20 @@
 package escapegame;
 
+import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 /**
  * The GameEngine class is responsible for managing information about the game,
  * creating levels, the player, monsters, as well as updating information when a
  * key is pressed while the game is running.
  */
-public class GameEngine {
+public class GameEngine extends JPanel {
 
     /**
      * An enumeration type to represent different types of tiles that make up
@@ -52,7 +57,7 @@ public class GameEngine {
      * The number of levels cleared by the player in this game. Can be used to
      * generate harder games as the player clears levels.
      */
-    private int cleared = 0;
+    private static int cleared = 0;
 
     /**
      * Tracks the current turn number. Used to control monster movement.
@@ -98,7 +103,7 @@ public class GameEngine {
      * information for the player, including the current position (which is a
      * pair of co-ordinates that corresponds to a tile in the current level)
      */
-    private Human player;
+    private static Human player;
 
     /**
      * A Fuel object that must be collected by the player in order to move to
@@ -603,9 +608,9 @@ public class GameEngine {
             moveChasers();
         }
 
-        if (player.getHealth() < 1) {
-            System.exit(0);
-        }
+//        if (player.getHealth() < 1) {
+//            System.exit(0);
+//        }
 
         int playerX = player.getX();
         int playerY = player.getY();
@@ -667,5 +672,29 @@ public class GameEngine {
         fuel = spawnFuel();
         health = spawnHealth();
         gui.updateDisplay(tiles, player, seekers, chasers, fuel, health);
+    }
+
+    public static void youWin(Graphics g) {
+        try {
+            Graphics2D g2 = (Graphics2D) g;
+            Image youWin = ImageIO.read(new File("assets/you-win.png"));
+            if (cleared == 5) {
+                g2.drawImage(youWin, 0, 0, 816,615,null);
+            }
+        } catch (IOException e) {
+            System.out.println(e);
+        }
+    }
+
+    public static void gameOver(Graphics g) {
+        try {
+            Graphics2D g2 = (Graphics2D) g;
+            Image gameOver = ImageIO.read(new File("assets/game-over.png"));
+            if (player.getHealth() < 1) {
+                g2.drawImage(gameOver, 0, 0, 816,615,null);
+            }
+        } catch (IOException e) {
+            System.out.println(e);
+        }
     }
 }

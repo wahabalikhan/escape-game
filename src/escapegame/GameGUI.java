@@ -185,6 +185,8 @@ class Canvas extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         drawMap(g);
+        GameEngine.youWin(g);
+        GameEngine.gameOver(g);
     }
 
     /**
